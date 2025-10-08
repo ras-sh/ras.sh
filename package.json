@@ -1,18 +1,18 @@
 {
-  "name": "@ras-sh/template-tanstack-start-convex",
+  "name": "ras.sh",
   "version": "0.0.1",
   "type": "module",
   "private": true,
-  "description": "Template for TanStack Start projects.",
+  "description": "🔱 A collection of side projects, experiments, and tools built with modern technologies.",
   "keywords": [],
   "homepage": "https://ras.sh",
   "bugs": {
-    "url": "https://github.com/ras-sh/template-tanstack-start-convex/issues",
+    "url": "https://github.com/ras-sh/ras.sh/issues",
     "email": "hi@ras.sh"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ras-sh/template-tanstack-start-convex"
+    "url": "https://github.com/ras-sh/ras.sh"
   },
   "license": "MIT",
   "author": {
@@ -32,14 +32,18 @@
   },
   "dependencies": {
     "@convex-dev/react-query": "0.0.0-alpha.11",
+    "@erquhart/convex-oss-stats": "^0.8.1",
     "@fontsource-variable/geist": "^5.2.8",
     "@fontsource-variable/geist-mono": "^5.2.7",
+    "@icons-pack/react-simple-icons": "^13.8.0",
     "@ras-sh/ui": "^0.0.2",
     "@tanstack/react-query": "^5.90.2",
     "@tanstack/react-router": "^1.132.47",
     "@tanstack/react-router-ssr-query": "^1.132.47",
     "@tanstack/react-start": "^1.132.51",
     "convex": "^1.27.4",
+    "lucide-react": "^0.545.0",
+    "posthog-js": "^1.273.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

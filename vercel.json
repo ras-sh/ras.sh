@@ -1,0 +1,4 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npx convex deploy --cmd 'pnpm run build' --cmd-url-env-var-name VITE_CONVEX_URL"
+}
