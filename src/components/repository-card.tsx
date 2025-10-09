@@ -1,3 +1,4 @@
+import { SiGithub, SiNpm } from "@icons-pack/react-simple-icons";
 import { Badge, Button } from "@ras-sh/ui";
 import { ExternalLink } from "lucide-react";
 import posthog from "posthog-js";
@@ -49,10 +50,41 @@ export function RepositoryCard({ repository, stats }: RepositoryCardProps) {
             </Button>
           )}
 
-          <div className="flex items-center gap-2 pb-2">
+          <div className="flex items-center gap-4">
             <RepositoryStats stats={stats} />
 
-            {repository.isTemplate && <Badge variant="outline">Template</Badge>}
+            {!(repository.hasNpmPackage || repository.isTemplate) && (
+              <Badge variant="secondary">
+                <img
+                  alt="App"
+                  className="mr-1 size-3"
+                  height={16}
+                  src="https://r2.ras.sh/icon.svg"
+                  width={16}
+                />
+                App
+              </Badge>
+            )}
+
+            {repository.hasNpmPackage && (
+              <Badge asChild variant="secondary">
+                <a
+                  href={`https://npmjs.com/package/@ras-sh/${repository.id}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <SiNpm className="mr-1 size-4 text-[#CB3837]" />
+                  Package
+                </a>
+              </Badge>
+            )}
+
+            {repository.isTemplate && (
+              <Badge variant="secondary">
+                <SiGithub className="mr-1 size-4 text-[#ffffff]" />
+                Template
+              </Badge>
+            )}
           </div>
 
           <p className="font-sans text-sm text-zinc-300 leading-relaxed transition-all duration-200 sm:text-base">

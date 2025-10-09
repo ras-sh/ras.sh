@@ -20,7 +20,7 @@ export const RepositoryStats = ({ stats }: RepositoryStatsProps) => {
   const githubStars = stats?.github?.starCount;
 
   return (
-    <div className="flex items-center space-x-6 text-sm text-zinc-400">
+    <div className="flex items-center space-x-4 text-sm text-zinc-400">
       {githubStars !== undefined && (
         <div className="flex items-center space-x-2">
           <Star className="size-4" />
