@@ -1,6 +1,6 @@
 # ras.sh
 
-🔱 A collection of side projects, experiments, and tools built with modern technologies.
+A collection of side projects, experiments, and tools built with modern technologies.
 
 ## Quick Start
 
