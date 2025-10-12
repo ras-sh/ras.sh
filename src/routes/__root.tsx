@@ -1,4 +1,7 @@
 /// <reference types="vite/client" />
+
+import geistWoff2 from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url";
+import geistMonoWoff2 from "@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2?url";
 import type { QueryClient } from "@tanstack/react-query";
 import {
   createRootRouteWithContext,
@@ -31,6 +34,21 @@ export const Route = createRootRouteWithContext<{
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+
+      {
+        rel: "preload",
+        as: "font",
+        type: "font/woff2",
+        href: geistWoff2,
+        crossorigin: "anonymous",
+      },
+      {
+        rel: "preload",
+        as: "font",
+        type: "font/woff2",
+        href: geistMonoWoff2,
+        crossorigin: "anonymous",
+      },
       {
         rel: "apple-touch-icon",
         sizes: "180x180",
