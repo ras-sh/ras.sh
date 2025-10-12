@@ -16,6 +16,12 @@ export const REPOSITORIES = [
     externalUrl: "https://icon-gen.ras.sh",
   },
   {
+    id: "img-to-palette",
+    description:
+      "🎨 Generate color palettes from any image and find the nearest Tailwind colors for quick design matching.",
+    externalUrl: "https://img-to-palette.ras.sh",
+  },
+  {
     id: "convex-cli",
     description:
       "⚡⌨️ Turn your Convex backend into a type-safe CLI with automatic function discovery and input validation.",
