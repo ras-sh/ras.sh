@@ -1,5 +1,6 @@
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { BookDashed, Hash, Package } from "lucide-react";
 import { RepositoryCard } from "~/components/repository-card";
 import { api } from "~/convex/_generated/api";
 import { REPOSITORIES } from "~/lib/constants";
@@ -40,7 +41,10 @@ export function RepositorySection() {
       {/* Apps Section */}
       {apps.length > 0 && (
         <div className="space-y-4 sm:space-y-6">
-          <h2 className="font-bold text-2xl text-zinc-100 sm:text-3xl">Apps</h2>
+          <h2 className="flex items-center gap-3 font-bold text-2xl text-zinc-100 sm:text-3xl">
+            <Hash className="text-muted-foreground" />
+            <span>Apps</span>
+          </h2>
           {renderRepositoryGrid(apps)}
         </div>
       )}
@@ -48,8 +52,9 @@ export function RepositorySection() {
       {/* Packages Section */}
       {packages.length > 0 && (
         <div className="space-y-4 sm:space-y-6">
-          <h2 className="font-bold text-2xl text-zinc-100 sm:text-3xl">
-            Packages
+          <h2 className="flex items-center gap-3 font-bold text-2xl text-zinc-100 sm:text-3xl">
+            <Package className="text-muted-foreground" />
+            <span>Packages</span>
           </h2>
           {renderRepositoryGrid(packages)}
         </div>
@@ -58,8 +63,9 @@ export function RepositorySection() {
       {/* Templates Section */}
       {templates.length > 0 && (
         <div className="space-y-4 sm:space-y-6">
-          <h2 className="font-bold text-2xl text-zinc-100 sm:text-3xl">
-            Templates
+          <h2 className="flex items-center gap-3 font-bold text-2xl text-zinc-100 sm:text-3xl">
+            <BookDashed className="text-muted-foreground" />
+            <span>Templates</span>
           </h2>
           {renderRepositoryGrid(templates)}
         </div>

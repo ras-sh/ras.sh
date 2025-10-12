@@ -34,11 +34,11 @@ export function RepositoryCard({ repository, stats }: RepositoryCardProps) {
               {repository.id}
             </h3>
 
-            <RepositoryStats stats={stats} />
-
             <p className="font-sans text-sm text-zinc-300 leading-relaxed transition-all duration-200 sm:text-base">
               {repository.description}
             </p>
+
+            <RepositoryStats stats={stats} />
           </div>
         </a>
       </Button>
