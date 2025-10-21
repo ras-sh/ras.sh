@@ -1,6 +1,5 @@
 import { convexQuery } from "@convex-dev/react-query";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { BookDashed, Hash, Package } from "lucide-react";
 import { RepositoryCard } from "~/components/repository-card";
 import { api } from "~/convex/_generated/api";
 import { REPOSITORIES } from "~/lib/constants";
@@ -10,66 +9,96 @@ export function RepositorySection() {
     convexQuery(api.ossStats.getAllStats, {})
   );
 
-  // Group repositories by type
-  const templates = REPOSITORIES.filter((repo) => repo.isTemplate);
-  const packages = REPOSITORIES.filter((repo) => repo.hasNpmPackage);
-  const apps = REPOSITORIES.filter((repo) => {
-    const isNotTemplate = !templates.includes(repo);
-    const isNotPackage = !packages.includes(repo);
-    return isNotTemplate && isNotPackage;
+  // Sorting weights and constants
+  // Type weights: Apps prioritized first, then packages, then templates
+  const TYPE_WEIGHTS = {
+    app: 1000, // Apps (with external URLs) always appear first
+    package: 50, // Packages ranked second (also benefit from NPM download scores)
+    template: 10, // Templates ranked last
+  };
+
+  // NPM downloads are scaled logarithmically to prevent dominance
+  // Multiplier adjusts the relative importance of downloads vs stars
+  const NPM_LOG_MULTIPLIER = 50;
+
+  // Recency bonus: Active repos get a boost, with decay over 1 year
+  const RECENCY_MAX_BONUS = 100;
+  const RECENCY_DECAY_DAYS = 365; // 1 year
+  const MILLISECONDS = 1000;
+  const MILLISECONDS_PER_DAY = MILLISECONDS * 60 * 60 * 24;
+
+  const getTypeWeight = (repo: (typeof REPOSITORIES)[number]) => {
+    if (repo.externalUrl) {
+      return TYPE_WEIGHTS.app;
+    }
+    if (repo.hasNpmPackage) {
+      return TYPE_WEIGHTS.package;
+    }
+    if (repo.isTemplate) {
+      return TYPE_WEIGHTS.template;
+    }
+    return 0;
+  };
+
+  const getNpmScore = (downloads: number) => {
+    // Use logarithmic scaling to normalize download counts
+    // log10(1000) ≈ 3, log10(1M) ≈ 6, log10(10M) ≈ 7
+    return downloads > 0 ? Math.log10(downloads) * NPM_LOG_MULTIPLIER : 0;
+  };
+
+  const getRecencyBonus = (updatedAt: number) => {
+    if (!updatedAt) {
+      return 0;
+    }
+    const daysSinceUpdate = (Date.now() - updatedAt) / MILLISECONDS_PER_DAY;
+    // Linear decay from max bonus to 0 over RECENCY_DECAY_DAYS
+    const bonus =
+      RECENCY_MAX_BONUS -
+      (daysSinceUpdate / RECENCY_DECAY_DAYS) * RECENCY_MAX_BONUS;
+    return Math.max(0, bonus);
+  };
+
+  // Create a map for O(1) stats lookup instead of O(n) find operations
+  const statsMap = new Map(allStats.map((stat) => [stat.repository, stat]));
+
+  const sortedRepositories = [...REPOSITORIES].sort((a, b) => {
+    const aStats = statsMap.get(a.id);
+    const bStats = statsMap.get(b.id);
+
+    const aStars = aStats?.github?.starCount ?? 0;
+    const bStars = bStats?.github?.starCount ?? 0;
+
+    const aNpmDownloads = aStats?.npm?.downloadCount ?? 0;
+    const bNpmDownloads = bStats?.npm?.downloadCount ?? 0;
+
+    const aUpdatedAt = aStats?.github?.updatedAt ?? 0;
+    const bUpdatedAt = bStats?.github?.updatedAt ?? 0;
+
+    // Calculate composite score: stars + npm (log scaled) + type weight + recency bonus
+    const aScore =
+      aStars +
+      getNpmScore(aNpmDownloads) +
+      getTypeWeight(a) +
+      getRecencyBonus(aUpdatedAt);
+    const bScore =
+      bStars +
+      getNpmScore(bNpmDownloads) +
+      getTypeWeight(b) +
+      getRecencyBonus(bUpdatedAt);
+
+    return bScore - aScore;
   });
 
-  const renderRepositoryGrid = (repositories: typeof REPOSITORIES) => (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
-      {repositories.map((repository) => {
-        const stats = allStats.find(
-          (stat) => stat.repository === repository.id
-        );
+  return (
+    <section className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2">
+      {sortedRepositories.map((repository) => {
+        const stats = statsMap.get(repository.id);
         return (
-          <RepositoryCard
-            key={repository.id}
-            repository={repository}
-            stats={stats}
-          />
+          <div className="break-inside-avoid" key={repository.id}>
+            <RepositoryCard repository={repository} stats={stats} />
+          </div>
         );
       })}
-    </div>
-  );
-
-  return (
-    <section className="space-y-12 sm:space-y-16">
-      {/* Apps Section */}
-      {apps.length > 0 && (
-        <div className="space-y-4 sm:space-y-6">
-          <h2 className="flex items-center gap-3 font-bold text-2xl text-zinc-100 sm:text-3xl">
-            <Hash className="text-muted-foreground" />
-            <span>Apps</span>
-          </h2>
-          {renderRepositoryGrid(apps)}
-        </div>
-      )}
-
-      {/* Packages Section */}
-      {packages.length > 0 && (
-        <div className="space-y-4 sm:space-y-6">
-          <h2 className="flex items-center gap-3 font-bold text-2xl text-zinc-100 sm:text-3xl">
-            <Package className="text-muted-foreground" />
-            <span>Packages</span>
-          </h2>
-          {renderRepositoryGrid(packages)}
-        </div>
-      )}
-
-      {/* Templates Section */}
-      {templates.length > 0 && (
-        <div className="space-y-4 sm:space-y-6">
-          <h2 className="flex items-center gap-3 font-bold text-2xl text-zinc-100 sm:text-3xl">
-            <BookDashed className="text-muted-foreground" />
-            <span>Templates</span>
-          </h2>
-          {renderRepositoryGrid(templates)}
-        </div>
-      )}
     </section>
   );
 }

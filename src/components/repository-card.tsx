@@ -1,5 +1,5 @@
 import { SiNpm } from "@icons-pack/react-simple-icons";
-import { Button } from "@ras-sh/ui";
+import { Button, cn } from "@ras-sh/ui";
 import { ExternalLink } from "lucide-react";
 import posthog from "posthog-js";
 import { RepositoryStats } from "~/components/repository-stats";
@@ -11,12 +11,28 @@ type RepositoryCardProps = {
   stats?: RepositoryStatsType;
 };
 
+const getBorderColor = (repository: Repository) => {
+  if (repository.externalUrl) {
+    return "border-l-blue-500/50! hover:border-l-blue-500/70!";
+  }
+  if (repository.hasNpmPackage) {
+    return "border-l-red-500/50! hover:border-l-red-500/70!";
+  }
+  if (repository.isTemplate) {
+    return "border-l-zinc-200/50! hover:border-l-zinc-200/70!";
+  }
+  return "";
+};
+
 export function RepositoryCard({ repository, stats }: RepositoryCardProps) {
   return (
-    <div className="relative">
+    <div className="relative h-full">
       <Button
         asChild
-        className="block h-auto whitespace-normal p-4 transition-all duration-200"
+        className={cn(
+          "block h-full whitespace-normal border-l-4 p-4 transition-all duration-200",
+          getBorderColor(repository)
+        )}
         variant="outline"
       >
         <a
@@ -29,14 +45,16 @@ export function RepositoryCard({ repository, stats }: RepositoryCardProps) {
           rel="noopener noreferrer"
           target="_blank"
         >
-          <div className="space-y-3 sm:space-y-2">
-            <h3 className="font-bold text-base text-zinc-100 transition-all duration-200 sm:text-lg">
-              {repository.id}
-            </h3>
+          <div className="flex h-full flex-col gap-3 sm:gap-2">
+            <div className="flex-1 space-y-3 sm:space-y-2">
+              <h3 className="font-bold text-base text-zinc-100 transition-all duration-200 sm:text-lg">
+                {repository.id}
+              </h3>
 
-            <p className="font-sans text-sm text-zinc-300 leading-relaxed transition-all duration-200 sm:text-base">
-              {repository.description}
-            </p>
+              <p className="font-sans text-sm text-zinc-300 leading-relaxed transition-all duration-200 sm:text-base">
+                {repository.description}
+              </p>
+            </div>
 
             <RepositoryStats stats={stats} />
           </div>

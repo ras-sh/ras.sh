@@ -34,20 +34,19 @@ export const Route = createRootRouteWithContext<{
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-
       {
         rel: "preload",
         as: "font",
         type: "font/woff2",
         href: geistWoff2,
-        crossorigin: "anonymous",
+        crossOrigin: "anonymous",
       },
       {
         rel: "preload",
         as: "font",
         type: "font/woff2",
         href: geistMonoWoff2,
-        crossorigin: "anonymous",
+        crossOrigin: "anonymous",
       },
       {
         rel: "apple-touch-icon",

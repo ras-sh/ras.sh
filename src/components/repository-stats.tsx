@@ -1,4 +1,5 @@
 import { useNpmDownloadCounter } from "@erquhart/convex-oss-stats/react";
+import { formatDistanceToNow } from "date-fns";
 import { Download, Star } from "lucide-react";
 import type { RepositoryStats as RepositoryStatsType } from "~/convex/ossStats";
 
@@ -18,20 +19,29 @@ export const RepositoryStats = ({ stats }: RepositoryStatsProps) => {
   const liveNpmDownloadCount = useNpmDownloadCounter(npmData);
 
   const githubStars = stats?.github?.starCount;
+  const updatedAt = stats?.github?.updatedAt;
 
   return (
-    <div className="flex items-center space-x-4 pt-0.5 text-sm text-zinc-400">
-      {githubStars !== undefined && (
-        <div className="flex items-center space-x-2">
-          <Star className="size-4" />
-          <span>{githubStars}</span>
-        </div>
-      )}
+    <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-0.5 text-sm text-zinc-400">
+      <div className="flex items-center space-x-4">
+        {githubStars !== undefined && (
+          <div className="flex items-center space-x-2">
+            <Star className="size-4" />
+            <span>{githubStars}</span>
+          </div>
+        )}
 
-      {npmData && (
-        <div className="flex items-center space-x-2">
-          <Download className="size-4" />
-          <span>{liveNpmDownloadCount.count || 0}</span>
+        {npmData && (
+          <div className="flex items-center space-x-2">
+            <Download className="size-4" />
+            <span>{liveNpmDownloadCount.count || 0}</span>
+          </div>
+        )}
+      </div>
+
+      {updatedAt && (
+        <div className="text-xs text-zinc-500">
+          Updated {formatDistanceToNow(updatedAt, { addSuffix: true })}
         </div>
       )}
     </div>
