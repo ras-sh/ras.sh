@@ -1,5 +1,4 @@
 import { useNpmDownloadCounter } from "@erquhart/convex-oss-stats/react";
-import { formatDistanceToNow } from "date-fns";
 import { Download, Star } from "lucide-react";
 import type { RepositoryStats as RepositoryStatsType } from "~/convex/ossStats";
 
@@ -19,7 +18,6 @@ export const RepositoryStats = ({ stats }: RepositoryStatsProps) => {
   const liveNpmDownloadCount = useNpmDownloadCounter(npmData);
 
   const githubStars = stats?.github?.starCount;
-  const updatedAt = stats?.github?.updatedAt;
 
   return (
     <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-0.5 text-sm text-zinc-400">
@@ -38,12 +36,6 @@ export const RepositoryStats = ({ stats }: RepositoryStatsProps) => {
           </div>
         )}
       </div>
-
-      {updatedAt && (
-        <div className="text-xs text-zinc-500">
-          Updated {formatDistanceToNow(updatedAt, { addSuffix: true })}
-        </div>
-      )}
     </div>
   );
 };
