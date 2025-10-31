@@ -13,13 +13,13 @@ type RepositoryCardProps = {
 
 const getBorderColor = (repository: Repository) => {
   if (repository.externalUrl) {
-    return "border-l-blue-500/50! hover:border-l-blue-500/70!";
+    return "border-solid border-indigo-400/50! hover:border-indigo-400/70!";
   }
   if (repository.hasNpmPackage) {
-    return "border-l-red-500/50! hover:border-l-red-500/70!";
+    return "border-dotted border-red-500/50! hover:border-red-500/70!";
   }
   if (repository.isTemplate) {
-    return "border-l-zinc-200/50! hover:border-l-zinc-200/70!";
+    return "border-dashed border-zinc-200/50! hover:border-zinc-200/70!";
   }
   return "";
 };
@@ -30,7 +30,8 @@ export function RepositoryCard({ repository, stats }: RepositoryCardProps) {
       <Button
         asChild
         className={cn(
-          "block h-full whitespace-normal border-l-4 p-4 transition-all duration-200",
+          "block h-full whitespace-normal bg-transparent! p-4 transition-all duration-200",
+          "bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-size-[16px_16px]",
           getBorderColor(repository)
         )}
         variant="outline"
