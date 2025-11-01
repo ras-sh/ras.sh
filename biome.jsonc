@@ -8,6 +8,9 @@
       },
       "style": {
         "useFilenamingConvention": "off"
+      },
+      "nursery": {
+        "noShadow": "off"
       }
     }
   }

@@ -1,9 +1,18 @@
 import { SiNpm } from "@icons-pack/react-simple-icons";
 import { Button, cn } from "@ras-sh/ui";
 import { ExternalLink } from "lucide-react";
+import { memo } from "react";
 import { RepositoryStats } from "~/components/repository-stats";
 import type { RepositoryStats as RepositoryStatsType } from "~/convex/ossStats";
-import type { Repository } from "~/lib/constants";
+import {
+  GITHUB_PREFIX,
+  getAppUrl,
+  isApp,
+  isPackage,
+  isTemplate,
+  NPM_PREFIX,
+  type Repository,
+} from "~/lib/constants";
 
 type RepositoryCardProps = {
   repository: Repository;
@@ -11,19 +20,22 @@ type RepositoryCardProps = {
 };
 
 const getBorderColor = (repository: Repository) => {
-  if (repository.externalUrl) {
-    return "border-solid border-indigo-400/50! hover:border-indigo-400/70!";
+  if (isApp(repository)) {
+    return "border-double border-indigo-400/50! hover:border-indigo-400/70!";
   }
-  if (repository.hasNpmPackage) {
+  if (isPackage(repository)) {
     return "border-dotted border-red-500/50! hover:border-red-500/70!";
   }
-  if (repository.isTemplate) {
+  if (isTemplate(repository)) {
     return "border-dashed border-zinc-200/50! hover:border-zinc-200/70!";
   }
   return "";
 };
 
-export function RepositoryCard({ repository, stats }: RepositoryCardProps) {
+export const RepositoryCard = memo(function RepositoryCardComponent({
+  repository,
+  stats,
+}: RepositoryCardProps) {
   return (
     <div className="relative h-full">
       <Button
@@ -38,7 +50,7 @@ export function RepositoryCard({ repository, stats }: RepositoryCardProps) {
         <a
           data-umami-event="github_link_clicked"
           data-umami-event-repository={repository.id}
-          href={`https://github.com/ras-sh/${repository.id}`}
+          href={`https://github.com/${GITHUB_PREFIX}${repository.id}`}
           rel="noopener noreferrer"
           target="_blank"
         >
@@ -59,12 +71,12 @@ export function RepositoryCard({ repository, stats }: RepositoryCardProps) {
       </Button>
 
       <div className="absolute top-2.5 right-2.5 flex gap-1">
-        {repository.hasNpmPackage && (
+        {isPackage(repository) && (
           <Button asChild size="icon" variant="ghost">
             <a
               data-umami-event="npm_link_clicked"
               data-umami-event-repository={repository.id}
-              href={`https://npmjs.com/package/@ras-sh/${repository.id}`}
+              href={`https://npmjs.com/package/${NPM_PREFIX}${repository.id}`}
               rel="noopener noreferrer"
               target="_blank"
             >
@@ -73,12 +85,12 @@ export function RepositoryCard({ repository, stats }: RepositoryCardProps) {
           </Button>
         )}
 
-        {repository.externalUrl && (
+        {isApp(repository) && (
           <Button asChild size="icon" variant="ghost">
             <a
               data-umami-event="external_link_clicked"
               data-umami-event-repository={repository.id}
-              href={repository.externalUrl}
+              href={getAppUrl(repository)}
               rel="noopener noreferrer"
               target="_blank"
             >
@@ -89,4 +101,4 @@ export function RepositoryCard({ repository, stats }: RepositoryCardProps) {
       </div>
     </div>
   );
-}
+});

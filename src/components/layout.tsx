@@ -1,5 +1,6 @@
 import { SiGithub, SiNpm } from "@icons-pack/react-simple-icons";
 import { Button } from "@ras-sh/ui";
+import { ORG } from "~/lib/constants";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -25,7 +26,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <a
                 data-umami-event="github_link_clicked"
                 data-umami-event-project="ras.sh"
-                href="https://github.com/ras-sh"
+                href={`https://github.com/${ORG}`}
                 rel="noopener noreferrer"
                 target="_blank"
               >
@@ -38,7 +39,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <a
                 data-umami-event="npm_link_clicked"
                 data-umami-event-project="ras.sh"
-                href="https://npmjs.com/org/ras-sh"
+                href={`https://npmjs.com/org/${ORG}`}
                 rel="noopener noreferrer"
                 target="_blank"
               >
