@@ -44,7 +44,6 @@
     "convex": "^1.28.0",
     "date-fns": "^4.1.0",
     "lucide-react": "^0.548.0",
-    "posthog-js": "^1.281.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

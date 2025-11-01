@@ -1,6 +1,5 @@
 import { SiGithub, SiNpm } from "@icons-pack/react-simple-icons";
 import { Button } from "@ras-sh/ui";
-import posthog from "posthog-js";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -22,15 +21,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="flex items-center gap-2">
-            <Button
-              asChild
-              onClick={() => {
-                posthog.capture("github_link_clicked", {
-                  project: "ras.sh",
-                });
-              }}
-            >
+            <Button asChild>
               <a
+                data-umami-event="github_link_clicked"
+                data-umami-event-project="ras.sh"
                 href="https://github.com/ras-sh"
                 rel="noopener noreferrer"
                 target="_blank"
@@ -40,15 +34,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </a>
             </Button>
 
-            <Button
-              asChild
-              onClick={() => {
-                posthog.capture("npm_link_clicked", {
-                  project: "ras.sh",
-                });
-              }}
-            >
+            <Button asChild>
               <a
+                data-umami-event="npm_link_clicked"
+                data-umami-event-project="ras.sh"
                 href="https://npmjs.com/org/ras-sh"
                 rel="noopener noreferrer"
                 target="_blank"
@@ -72,12 +61,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         Made with ❤️ by{" "}
         <a
           className="inline-flex flex-wrap items-center gap-1 font-medium underline decoration-zinc-600 underline-offset-2 transition-colors hover:text-zinc-100 hover:decoration-zinc-400"
+          data-umami-event="footer_link_clicked"
+          data-umami-event-project="ras.sh"
           href="https://ras.sh"
-          onClick={() => {
-            posthog.capture("footer_link_clicked", {
-              project: "ras.sh",
-            });
-          }}
           rel="noopener noreferrer"
           target="_blank"
         >

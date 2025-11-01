@@ -1,7 +1,6 @@
 import { SiNpm } from "@icons-pack/react-simple-icons";
 import { Button, cn } from "@ras-sh/ui";
 import { ExternalLink } from "lucide-react";
-import posthog from "posthog-js";
 import { RepositoryStats } from "~/components/repository-stats";
 import type { RepositoryStats as RepositoryStatsType } from "~/convex/ossStats";
 import type { Repository } from "~/lib/constants";
@@ -37,12 +36,9 @@ export function RepositoryCard({ repository, stats }: RepositoryCardProps) {
         variant="outline"
       >
         <a
+          data-umami-event="github_link_clicked"
+          data-umami-event-repository={repository.id}
           href={`https://github.com/ras-sh/${repository.id}`}
-          onClick={() => {
-            posthog.capture("repository_card_clicked", {
-              repository: repository.id,
-            });
-          }}
           rel="noopener noreferrer"
           target="_blank"
         >
@@ -66,6 +62,8 @@ export function RepositoryCard({ repository, stats }: RepositoryCardProps) {
         {repository.hasNpmPackage && (
           <Button asChild size="icon" variant="ghost">
             <a
+              data-umami-event="npm_link_clicked"
+              data-umami-event-repository={repository.id}
               href={`https://npmjs.com/package/@ras-sh/${repository.id}`}
               rel="noopener noreferrer"
               target="_blank"
@@ -78,6 +76,8 @@ export function RepositoryCard({ repository, stats }: RepositoryCardProps) {
         {repository.externalUrl && (
           <Button asChild size="icon" variant="ghost">
             <a
+              data-umami-event="external_link_clicked"
+              data-umami-event-repository={repository.id}
               href={repository.externalUrl}
               rel="noopener noreferrer"
               target="_blank"

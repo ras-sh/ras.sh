@@ -32,6 +32,13 @@ export const Route = createRootRouteWithContext<{
           "A collection of side projects, experiments, and tools built with modern technologies",
       }),
     ],
+    scripts: [
+      {
+        src: "https://u.tronite.com/script.js",
+        defer: true,
+        "data-website-id": "83858fc3-d489-45d1-a36c-7939694852b8",
+      },
+    ],
     links: [
       { rel: "stylesheet", href: appCss },
       {
