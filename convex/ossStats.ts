@@ -1,8 +1,10 @@
 import { OssStats } from "@erquhart/convex-oss-stats";
 import {
   GITHUB_PREFIX,
+  isPackage,
   NPM_PREFIX,
   ORG,
+  PACKAGES,
   REPOSITORIES,
 } from "../src/lib/constants";
 import { components } from "./_generated/api";
@@ -11,9 +13,7 @@ import { type QueryCtx, query } from "./_generated/server";
 const githubRepos = REPOSITORIES.map(
   (repository) => `${GITHUB_PREFIX}${repository.id}`
 );
-const npmPackages = REPOSITORIES.filter(
-  (repository) => repository.hasNpmPackage
-).map((repository) => `${NPM_PREFIX}${repository.id}`);
+const npmPackages = PACKAGES.map((pkg) => `${NPM_PREFIX}${pkg.id}`);
 
 export const ossStats = new OssStats(components.ossStats, {
   githubOwners: [ORG],
@@ -36,7 +36,7 @@ export const {
 async function fetchRepositoryStats(
   ctx: QueryCtx,
   repositoryId: string,
-  hasNpmPackage?: boolean
+  isPackage: boolean
 ) {
   let githubData: Awaited<ReturnType<typeof ossStats.getGithubRepo>> | null =
     null;
@@ -51,7 +51,7 @@ async function fetchRepositoryStats(
     // Ignore error
   }
 
-  if (hasNpmPackage) {
+  if (isPackage) {
     try {
       npmData = await ossStats.getNpmPackage(
         ctx,
@@ -82,7 +82,7 @@ export const getAllStats = query({
         const data = await fetchRepositoryStats(
           ctx,
           repository.id,
-          repository.hasNpmPackage
+          isPackage(repository)
         );
 
         return {
