@@ -4,7 +4,7 @@ export const NPM_PREFIX = `@${ORG}/`;
 
 export const APPS = [
   {
-    id: "chat",
+    id: "local-chat",
     description:
       "💬 Local-first AI chat using Chrome's built-in AI. Conversations run entirely in your browser and stay on your device.",
   },
