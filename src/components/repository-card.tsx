@@ -21,13 +21,26 @@ type RepositoryCardProps = {
 
 const getBorderColor = (repository: Repository) => {
   if (isApp(repository)) {
-    return "border-double border-indigo-400/50! hover:border-indigo-400/70!";
+    return "border-indigo-400/50! hover:border-indigo-400/70!";
   }
   if (isPackage(repository)) {
-    return "border-dotted border-red-500/50! hover:border-red-500/70!";
+    return "border-red-500/50! hover:border-red-500/70!";
   }
   if (isTemplate(repository)) {
-    return "border-dashed border-zinc-200/50! hover:border-zinc-200/70!";
+    return "border-zinc-200/50! hover:border-zinc-200/70!";
+  }
+  return "";
+};
+
+const getShadowColor = (repository: Repository) => {
+  if (isApp(repository)) {
+    return "shadow-[6px_6px_0_0_--theme(--color-indigo-400/0.5)] hover:shadow-[6px_6px_0_0_--theme(--color-indigo-400/0.7)]";
+  }
+  if (isPackage(repository)) {
+    return "shadow-[6px_6px_0_0_--theme(--color-red-500/0.5)] hover:shadow-[6px_6px_0_0_--theme(--color-red-500/0.7)]";
+  }
+  if (isTemplate(repository)) {
+    return "shadow-[6px_6px_0_0_--theme(--color-zinc-200/0.5)] hover:shadow-[6px_6px_0_0_--theme(--color-zinc-200/0.7)]";
   }
   return "";
 };
@@ -41,9 +54,9 @@ export const RepositoryCard = memo(function RepositoryCardComponent({
       <Button
         asChild
         className={cn(
-          "block h-full whitespace-normal bg-transparent! p-4 transition-all duration-200",
-          "bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-size-[16px_16px]",
-          getBorderColor(repository)
+          "relative block h-full whitespace-normal rounded-none border-2 bg-transparent! p-4",
+          getBorderColor(repository),
+          getShadowColor(repository)
         )}
         variant="outline"
       >
@@ -56,11 +69,11 @@ export const RepositoryCard = memo(function RepositoryCardComponent({
         >
           <div className="flex h-full flex-col gap-3 sm:gap-2">
             <div className="flex-1 space-y-3 sm:space-y-2">
-              <h3 className="font-bold text-base text-zinc-100 transition-all duration-200 sm:text-lg">
+              <h3 className="font-bold text-base text-zinc-100 sm:text-lg">
                 {repository.id}
               </h3>
 
-              <p className="font-sans text-sm text-zinc-300 leading-relaxed transition-all duration-200 sm:text-base">
+              <p className="font-sans text-sm text-zinc-300 leading-relaxed sm:text-base">
                 {repository.description}
               </p>
             </div>

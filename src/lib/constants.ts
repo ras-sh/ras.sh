@@ -4,6 +4,11 @@ export const NPM_PREFIX = `@${ORG}/`;
 
 export const APPS = [
   {
+    id: "local-quest",
+    description:
+      "🗺️ Local-first AI text adventures using your browser's built-in AI. Infinite worlds generated and played entirely on your device.",
+  },
+  {
     id: "local-chat",
     description:
       "💬 Local-first AI chat using Chrome's built-in AI. Conversations run entirely in your browser and stay on your device.",
