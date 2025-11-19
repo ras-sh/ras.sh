@@ -1,6 +1,5 @@
-import { SiNpm } from "@icons-pack/react-simple-icons";
+import { SiGithub } from "@icons-pack/react-simple-icons";
 import { Button, cn } from "@ras-sh/ui";
-import { ExternalLink } from "lucide-react";
 import { memo } from "react";
 import { RepositoryStats } from "~/components/repository-stats";
 import type { RepositoryStats as RepositoryStatsType } from "~/convex/ossStats";
@@ -45,6 +44,26 @@ const getShadowColor = (repository: Repository) => {
   return "";
 };
 
+const getCardUrl = (repository: Repository) => {
+  if (isApp(repository)) {
+    return getAppUrl(repository);
+  }
+  if (isPackage(repository)) {
+    return `https://npmjs.com/package/${NPM_PREFIX}${repository.id}`;
+  }
+  return `https://github.com/${GITHUB_PREFIX}${repository.id}`;
+};
+
+const getCardEventName = (repository: Repository) => {
+  if (isApp(repository)) {
+    return "app_link_clicked";
+  }
+  if (isPackage(repository)) {
+    return "npm_link_clicked";
+  }
+  return "github_link_clicked";
+};
+
 export const RepositoryCard = memo(function RepositoryCardComponent({
   repository,
   stats,
@@ -61,9 +80,9 @@ export const RepositoryCard = memo(function RepositoryCardComponent({
         variant="outline"
       >
         <a
-          data-umami-event="github_link_clicked"
+          data-umami-event={getCardEventName(repository)}
           data-umami-event-repository={repository.id}
-          href={`https://github.com/${GITHUB_PREFIX}${repository.id}`}
+          href={getCardUrl(repository)}
           rel="noopener noreferrer"
           target="_blank"
         >
@@ -84,30 +103,16 @@ export const RepositoryCard = memo(function RepositoryCardComponent({
       </Button>
 
       <div className="absolute top-2.5 right-2.5 flex gap-1">
-        {isPackage(repository) && (
+        {(isApp(repository) || isPackage(repository)) && (
           <Button asChild size="icon" variant="ghost">
             <a
-              data-umami-event="npm_link_clicked"
+              data-umami-event="github_icon_clicked"
               data-umami-event-repository={repository.id}
-              href={`https://npmjs.com/package/${NPM_PREFIX}${repository.id}`}
+              href={`https://github.com/${GITHUB_PREFIX}${repository.id}`}
               rel="noopener noreferrer"
               target="_blank"
             >
-              <SiNpm className="size-4 text-[#CB3837]" />
-            </a>
-          </Button>
-        )}
-
-        {isApp(repository) && (
-          <Button asChild size="icon" variant="ghost">
-            <a
-              data-umami-event="external_link_clicked"
-              data-umami-event-repository={repository.id}
-              href={getAppUrl(repository)}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <ExternalLink className="size-4" />
+              <SiGithub className="size-4" />
             </a>
           </Button>
         )}
